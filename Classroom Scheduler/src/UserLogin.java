@@ -99,18 +99,15 @@ public class UserLogin extends JDialog {
     setup.insets = new Insets(10,80,0,0);
     loginPanel.add(this.loginButton, setup);
     
-    addWindowListener(new WindowAdapter() {  
-      @Override
-      public void windowClosing(WindowEvent e) {  
-        System.exit(0);  
-      }  
-    });
+    this.getRootPane().setDefaultButton(loginButton);
+    usernameTextField.requestFocus();
+    this.add(loginPanel);
     
     loginButton.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
         statusLabel.setText(" ");
-        if(Login.authenticate(usernameTextField.getText(), passwordTextField.getText())) {  //TODO change password.getText()
+        if(Login.authenticate(usernameTextField.getText(), new String(passwordTextField.getPassword()))) {
           parent.setVisible(true);
           setVisible(false);
         } else {
@@ -130,7 +127,5 @@ public class UserLogin extends JDialog {
       }
       
     });
-    usernameTextField.requestFocus();
-    this.add(loginPanel);
   }
 }
