@@ -5,14 +5,10 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -37,6 +33,7 @@ public class UserLogin extends JDialog {
     this.setSize(300,350);
     this.setLocationRelativeTo(null);   //Center Login
     this.setTitle("User Login");
+    this.setResizable(false);
     
     this.loginButton = new JButton("Login");
     this.closeButton = new JButton("Close");
