@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -60,11 +61,11 @@ public class Main extends JFrame {
         viewScheduleButton.setPreferredSize(new Dimension(75, 75));
         adminButton.setPreferredSize(new Dimension(75, 75));
         closeButton.setPreferredSize(new Dimension(75, 75));
-        
+
+        buttonPanel.add(closeButton);
         buttonPanel.add(courseListButton);
         buttonPanel.add(viewScheduleButton);
         buttonPanel.add(adminButton);
-        buttonPanel.add(closeButton);
         
         closeButton.addActionListener(new ActionListener() {
           @Override
@@ -77,32 +78,37 @@ public class Main extends JFrame {
         JPanel tablePanel = new JPanel(new GridBagLayout());
         GridBagConstraints setup = new GridBagConstraints();
         
-        JTextArea courseTextArea = new JTextArea();
+        JTable courseTable = new JTable(200, 2) {
+          @Override
+          public Dimension getPreferredScrollableViewportSize() {
+            return new Dimension(100, 100);
+          }
+        };
+        courseTable.setFillsViewportHeight(true);
         setup.fill = GridBagConstraints.BOTH;
-        setup.ipady = 40;      //make this component tall
         setup.weightx = 0.5;
         setup.weighty = 1;
-        setup.gridwidth = 1;
         setup.gridx = 0;
-        setup.gridy = 1;
         setup.insets = new Insets(10,10,10,5);
-        tablePanel.add(new JScrollPane(courseTextArea), setup);
+        tablePanel.add(new JScrollPane(courseTable), setup);
         
-        JTextArea scheduleTextArea = new JTextArea();
+        JTable scheduleTable = new JTable(200, 5) {
+          @Override
+          public Dimension getPreferredScrollableViewportSize() {
+            return new Dimension(200, 100);
+          }
+        };
+
+        scheduleTable.setFillsViewportHeight(true);
         setup.fill = GridBagConstraints.BOTH;
-        setup.ipady = 40;      //make this component tall
         setup.weightx = 1;
         setup.weighty = 1;
-        setup.gridwidth = 2;
         setup.gridx = 1;
-        setup.gridy = 1;
         setup.insets = new Insets(10,5,10,10);
-        tablePanel.add(new JScrollPane(scheduleTextArea), setup);
+        tablePanel.add(new JScrollPane(scheduleTable), setup);
         
         frame.add(buttonPanel, BorderLayout.NORTH);
         frame.add(tablePanel, BorderLayout.CENTER);
-        
-        
       }
   });
   }
