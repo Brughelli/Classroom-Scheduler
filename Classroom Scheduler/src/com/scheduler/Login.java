@@ -1,3 +1,4 @@
+package com.scheduler;
 
 public class Login {
   public static boolean authenticate(String username, String password) {
