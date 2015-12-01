@@ -17,7 +17,8 @@ public class Driver {
     for (int i = 0; i < 10; i++) {
       username = "user" + i;
       password = "password" + i;
-      users.add(new User(username, password));
+      
+      users.add(new User(username, password, false));
     }
     
     // Hibernate Setup
@@ -33,6 +34,7 @@ public class Driver {
     for (User user : users) {
       session.save(user);
     }
+    session.save(new User("", "", true));
     session.getTransaction().commit();
     
     // Close Session
