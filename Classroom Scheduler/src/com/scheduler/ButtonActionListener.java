@@ -2,6 +2,7 @@ package com.scheduler;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 
@@ -25,16 +26,21 @@ public class ButtonActionListener implements ActionListener {
       UserLogin frame = (UserLogin) myFrame;
       
       // Authenticate User
-      if(Login.authenticate(frame.getUsernameTextField().getText(), new String(frame.getPasswordTextField().getPassword()))) {
-        // Close Login and Open Main upon Success
-        frame.getMyParent().setVisible(true);
-        frame.setVisible(false);
-      } else {
-        // Failed Authentication
-        frame.getStatusLabel().setText("Invalid Username/Password");
-        frame.getUsernameTextField().setText("");
-        frame.getPasswordTextField().setText("");
-        frame.getUsernameTextField().requestFocus();
+      try {
+        if(Login.authenticate(frame.getUsernameTextField().getText(), new String(frame.getPasswordTextField().getPassword()))) {
+          // Close Login and Open Main upon Success
+          frame.getMyParent().setVisible(true);
+          frame.setVisible(false);
+        } else {
+          // Failed Authentication
+          frame.getStatusLabel().setText("Invalid Username/Password");
+          frame.getUsernameTextField().setText("");
+          frame.getPasswordTextField().setText("");
+          frame.getUsernameTextField().requestFocus();
+        }
+      } catch (SQLException e1) {
+        // TODO Auto-generated catch block
+        e1.printStackTrace();
       }
     }
   }
