@@ -27,7 +27,7 @@ public class ButtonActionListener implements ActionListener {
       
       // Authenticate User
       try {
-        if(Login.authenticate(frame.getUsernameTextField().getText(), new String(frame.getPasswordTextField().getPassword()))) {
+        if(Login.authenticate(frame.getUsernameTextField().getText(), new String(frame.getPasswordTextField().getPassword()), frame.getMyParent())) {
           // Close Login and Open Main upon Success
           frame.getMyParent().setVisible(true);
           frame.setVisible(false);
