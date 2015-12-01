@@ -3,8 +3,6 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -22,40 +20,29 @@ public class UserLogin extends JDialog {
   private JLabel statusLabel;
   private JTextField usernameTextField;
   private JPasswordField passwordTextField;
+  private JFrame myParent;
   
   public UserLogin() {
     this(null, true);
   }
   
   public UserLogin(final JFrame parent, boolean modal) {
+    // Setup Window
     super(parent, modal);
-    
+    this.myParent = parent;
     this.setSize(300,350);
     this.setLocationRelativeTo(null);   //Center Login
     this.setTitle("User Login");
     this.setResizable(false);
     
-    this.loginButton = new JButton("Login");
-    this.closeButton = new JButton("Close");
-    this.usernameLabel = new JLabel("Username:");
-    this.passwordLabel = new JLabel("Password:");
-    this.statusLabel = new JLabel(" ");
-    this.usernameTextField = new JTextField("");
-    this.passwordTextField = new JPasswordField("");
-    
+    // Setup Components
+    ButtonActionListener buttonListener = new ButtonActionListener(this);
     JPanel loginPanel = new JPanel(new GridBagLayout());
     GridBagConstraints setup = new GridBagConstraints();
     
-    this.usernameLabel.setPreferredSize(new Dimension(100, 35));
-    this.usernameTextField.setPreferredSize(new Dimension(150, 25));
-    this.passwordLabel.setPreferredSize(new Dimension(100, 35));
-    this.passwordTextField.setPreferredSize(new Dimension(150, 25));
-    this.statusLabel.setForeground(Color.RED);
-    this.statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
-    
+    // Setup Logo
     JLabel tempLabel = new JLabel("LOGIN LOGO");
     tempLabel.setHorizontalAlignment(SwingConstants.CENTER);
-    
     setup.gridx = 0;
     setup.gridy = 0;
     setup.gridwidth = 2;
@@ -64,65 +51,79 @@ public class UserLogin extends JDialog {
     setup.gridwidth = 1;
     setup.ipady = 0;
     
+    // Setup Username Label / Text Field
+    this.usernameLabel = new JLabel("Username:");
+    this.usernameLabel.setPreferredSize(new Dimension(100, 35));
     setup.gridx = 0;
     setup.gridy = 1;
     loginPanel.add(this.usernameLabel, setup);
-    
+
+    this.usernameTextField = new JTextField("");
+    this.usernameTextField.setPreferredSize(new Dimension(150, 25));
     setup.gridx = 1;
     setup.gridy = 1;
     loginPanel.add(this.usernameTextField, setup);
     
+    // Setup Password Label / Text Field
+    this.passwordLabel = new JLabel("Password:");
+    this.passwordLabel.setPreferredSize(new Dimension(100, 35));
     setup.gridx = 0;
     setup.gridy = 2;
     loginPanel.add(this.passwordLabel, setup);
-    
+
+    this.passwordTextField = new JPasswordField("");
+    this.passwordTextField.setPreferredSize(new Dimension(150, 25));
     setup.gridx = 1;
     setup.gridy = 2;
     loginPanel.add(this.passwordTextField, setup);
     
+    // Setup Status Label
+    this.statusLabel = new JLabel(" ");
+    this.statusLabel.setForeground(Color.RED);
+    this.statusLabel.setHorizontalAlignment(SwingConstants.CENTER);
     setup.gridx = 0;
     setup.gridy = 3;
     setup.gridwidth = 2;
     loginPanel.add(this.statusLabel, setup);
     setup.gridwidth = 1;
     
+    // Setup Close Button
+    this.closeButton = new JButton("Close");
+    closeButton.addActionListener(buttonListener);
     setup.gridx = 1;
     setup.gridy = 4;
     setup.insets = new Insets(10,0,0,80);
     loginPanel.add(this.closeButton, setup);
     
+    // Setup Login Button
+    this.loginButton = new JButton("Login");
+    loginButton.addActionListener(buttonListener);
     setup.gridx = 1;
     setup.gridy = 4;
     setup.insets = new Insets(10,80,0,0);
     loginPanel.add(this.loginButton, setup);
     
+    // Setup Default Button and Focus
     this.getRootPane().setDefaultButton(loginButton);
     usernameTextField.requestFocus();
+    
+    // Add Panel
     this.add(loginPanel);
-    
-    loginButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        statusLabel.setText(" ");
-        if(Login.authenticate(usernameTextField.getText(), new String(passwordTextField.getPassword()))) {
-          parent.setVisible(true);
-          setVisible(false);
-        } else {
-          statusLabel.setText("Invalid Username/Password");
-          usernameTextField.setText("");
-          passwordTextField.setText("");
-          usernameTextField.requestFocus();
-        }
-        
-      }
-    });
-    
-    closeButton.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        dispose();
-      }
-      
-    });
+  }
+
+  public JLabel getStatusLabel() {
+    return statusLabel;
+  }
+
+  public JTextField getUsernameTextField() {
+    return usernameTextField;
+  }
+
+  public JPasswordField getPasswordTextField() {
+    return passwordTextField;
+  }
+
+  public JFrame getMyParent() {
+    return myParent;
   }
 }
