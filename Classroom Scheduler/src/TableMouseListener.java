@@ -3,32 +3,24 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JTable;
 
 public class TableMouseListener implements MouseListener {
 
   @Override
   public void mouseClicked(MouseEvent e) {
+    // Double-Click
     if (e.getClickCount() == 2) {
+      // Get Row in Table
       JTable target = (JTable) e.getSource();
       Point myPoint = e.getPoint();
       int row = target.rowAtPoint(myPoint);
       row += 1;
       
-      JDialog infoDialog = new JDialog();
-      JPanel infoPanel = new JPanel();
-      JLabel infoLabel = new JLabel();
+      // Setup Window
+      JDialog infoDialog = new CourseDetails(row);
       
-      infoDialog.setSize(400, 500);
-      infoDialog.setLocationRelativeTo(null);   //Center Login
-      infoDialog.setTitle("Course Details");
-      infoDialog.setResizable(false);
-      
-      infoLabel.setText("Row " + row + " was Clicked");
-      infoPanel.add(infoLabel);
-      infoDialog.add(infoPanel);
+      // Show Window
       infoDialog.setVisible(true);
     }
   }
