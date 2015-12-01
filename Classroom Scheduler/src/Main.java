@@ -5,13 +5,16 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -77,14 +80,18 @@ public class Main extends JFrame {
         
         JPanel tablePanel = new JPanel(new GridBagLayout());
         GridBagConstraints setup = new GridBagConstraints();
+        TableMouseListener tableMouseListener = new TableMouseListener();
         
-        JTable courseTable = new JTable(200, 2) {
+        // Setup Course Table
+        JTable courseTable = new JTable(150, 2) {
           @Override
           public Dimension getPreferredScrollableViewportSize() {
-            return new Dimension(100, 100);
+            return new Dimension(1, 1);
           }
         };
+        courseTable.addMouseListener(tableMouseListener);
         courseTable.setFillsViewportHeight(true);
+        courseTable.setEnabled(false);
         setup.fill = GridBagConstraints.BOTH;
         setup.weightx = 0.5;
         setup.weighty = 1;
@@ -92,14 +99,16 @@ public class Main extends JFrame {
         setup.insets = new Insets(10,10,10,5);
         tablePanel.add(new JScrollPane(courseTable), setup);
         
-        JTable scheduleTable = new JTable(200, 5) {
+        // Setup Schedule Table
+        JTable scheduleTable = new JTable(150, 5) {
           @Override
           public Dimension getPreferredScrollableViewportSize() {
-            return new Dimension(200, 100);
+            return new Dimension(2, 1);
           }
         };
-
+        scheduleTable.addMouseListener(tableMouseListener);
         scheduleTable.setFillsViewportHeight(true);
+        scheduleTable.setEnabled(false);  // Make Cells Non-editable
         setup.fill = GridBagConstraints.BOTH;
         setup.weightx = 1;
         setup.weighty = 1;
@@ -110,6 +119,6 @@ public class Main extends JFrame {
         frame.add(buttonPanel, BorderLayout.NORTH);
         frame.add(tablePanel, BorderLayout.CENTER);
       }
-  });
+    });
   }
 }
