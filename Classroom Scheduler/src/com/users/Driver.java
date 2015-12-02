@@ -2,43 +2,21 @@ package com.users;
 
 import java.util.ArrayList;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
+import com.scheduler.DatabaseToolbox;
 
 public class Driver {
   public static void main(String[] args) {
-    ArrayList<User> users = new ArrayList<User>();
+    ArrayList<Object> users = new ArrayList<Object>();
     String username;
-    String password;
     
+    // TODO Implement real user setup
     // Temp User Setup
     for (int i = 0; i < 10; i++) {
       username = "user" + i;
-      password = "password" + i;
-      
-      users.add(new User(username, password, false));
+      users.add(new User(username, "", false));
     }
+    users.add(new User("admin", "", true));
     
-    // Hibernate Setup
-    Configuration conf = new Configuration().configure();
-    conf.addAnnotatedClass(User.class);
-    StandardServiceRegistryBuilder reg = new StandardServiceRegistryBuilder().applySettings(
-                                                                            conf.getProperties());
-    SessionFactory factory = conf.buildSessionFactory(reg.build());
-    Session session = factory.openSession();
-    
-    // Write to Database
-    session.beginTransaction();
-    for (User user : users) {
-      session.save(user);
-    }
-    session.save(new User("", "", true));
-    session.getTransaction().commit();
-    
-    // Close Session
-    session.close();
-    factory.close();
+    DatabaseToolbox.updateDatabse(User.class, users);
   }
 }
