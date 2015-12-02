@@ -2,9 +2,8 @@ package com.scheduler;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
-
 import javax.swing.JButton;
+import javax.swing.JDialog;
 
 public class ButtonActionListener implements ActionListener {
   private Window myFrame;
@@ -15,34 +14,38 @@ public class ButtonActionListener implements ActionListener {
   
   @Override
   public void actionPerformed(ActionEvent e) {
-    // Setup Button
+    // Get Source Button
     JButton button = (JButton) e.getSource();
     
-    // Action based on button label
+    // Service Action
     if (button.getText().equalsIgnoreCase("close")) {
-      myFrame.dispose();    // Close window
+      // Close Window
+      myFrame.dispose();
+      
+    } else if (button.getText().equalsIgnoreCase("courses")) {
+      // Import Course List from selected File
+      CourseListImport.importCourses(myFrame);
+      
+    } else if (button.getText().equalsIgnoreCase("scheduler")) {
+      // Run Classroom Scheduler
+      JDialog scheduler = new SchedulerDialog();
+      scheduler.setVisible(true);
+      
     } else if (button.getText().equalsIgnoreCase("login")) {
-      // Login button from UserLogin class
       UserLogin frame = (UserLogin) myFrame;
       
-      // Authenticate User
-      try {
-        if(Login.authenticate(frame.getUsernameTextField().getText(), new String(frame.getPasswordTextField().getPassword()), frame.getMyParent())) {
-          // Close Login and Open Main upon Success
-          frame.getMyParent().setVisible(true);
-          frame.setVisible(false);
-        } else {
-          // Failed Authentication
-          frame.getStatusLabel().setText("Invalid Username/Password");
-          frame.getUsernameTextField().setText("");
-          frame.getPasswordTextField().setText("");
-          frame.getUsernameTextField().requestFocus();
-        }
-      } catch (SQLException e1) {
-        // TODO Auto-generated catch block
-        e1.printStackTrace();
+      // Authenticate Login
+      if(Login.authenticate(frame.getUsernameTextField().getText(), new String(frame.getPasswordTextField().getPassword()))) {
+        // Close Login and Open Main upon Success
+        frame.getMyParent().setVisible(true);
+        frame.setVisible(false);
+      } else {
+        // Failed Authentication
+        frame.getStatusLabel().setText("Invalid Username/Password");
+        frame.getUsernameTextField().setText("");
+        frame.getPasswordTextField().setText("");
+        frame.getUsernameTextField().requestFocus();
       }
-    }
+    } 
   }
-
 }
