@@ -27,6 +27,8 @@
  
         <!-- Mention here all the model classes along with their package name -->
         <mapping class="com.users.User"/>
+        <mapping class="com.scheduler.Course"/>
+        <mapping class="com.scheduler.Schedule"/>
         
     </session-factory>
 </hibernate-configuration>
