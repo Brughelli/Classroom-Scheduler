@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class CourseDetails extends JDialog {
+  private static final long serialVersionUID = 1L;
   private JButton closeButton;
   private JPanel infoPanel;
   private JPanel buttonPanel;
