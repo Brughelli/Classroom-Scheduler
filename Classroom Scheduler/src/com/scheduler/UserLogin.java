@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 public class UserLogin extends JDialog {
+  private static final long serialVersionUID = 1L;
   private JButton loginButton;
   private JButton closeButton;
   private JLabel usernameLabel;

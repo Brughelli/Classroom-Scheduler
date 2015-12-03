@@ -38,7 +38,7 @@ public class ButtonActionListener implements ActionListener {
       if(Login.authenticate(frame.getUsernameTextField().getText(), new String(frame.getPasswordTextField().getPassword()))) {
         // Close Login and Open Main upon Success
         frame.getMyParent().setVisible(true);
-        frame.setVisible(false);
+        frame.dispose();
       } else {
         // Failed Authentication
         frame.getStatusLabel().setText("Invalid Username/Password");
