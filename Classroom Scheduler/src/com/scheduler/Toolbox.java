@@ -31,8 +31,8 @@ public class Toolbox {
    * @param dupIndex    index in sub arrays that determine duplicate status
    * @return            2D array of Strings with dupIndex duplicates removed
    */
-  public static String[][] twoDArrayDuplicateRemoval(String[][] array, int dupIndex) {
-    ArrayList<String[]> tempArray = new ArrayList<String[]>();
+  public static Object[][] twoDArrayDuplicateRemoval(Object[][] array, int dupIndex) {
+    ArrayList<Object[]> tempArray = new ArrayList<Object[]>();
     int size = array.length;
     
     // Transfer Data
@@ -51,7 +51,7 @@ public class Toolbox {
     }
     
     // Create new String[][]
-    String[][] dataArray = new String[tempArray.size()][];
+    Object[][] dataArray = new Object[tempArray.size()][];
     int numRows = tempArray.size();
     for (i = 0; i < numRows; i++) {
       dataArray[i] = tempArray.get(i);
