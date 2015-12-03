@@ -63,7 +63,7 @@ public class CourseListImport {
       }
       
       // Update Course Database
-      DatabaseToolbox.updateDatabse(Course.class, courses);
+      UpdateDatabase.updateTable(Course.class, courses);
     }
   }
 }

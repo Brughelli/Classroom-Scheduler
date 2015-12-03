@@ -31,6 +31,6 @@ public class Scheduler {
       schedules.add(new Schedule(String.valueOf(i), "CSCI", "1300", "3:00", "3:50", "ECCS 120"));
     }
     
-    DatabaseToolbox.updateDatabse(Schedule.class, schedules);
+    UpdateDatabase.updateTable(Schedule.class, schedules);
   }
 }
