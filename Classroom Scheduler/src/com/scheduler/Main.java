@@ -80,10 +80,15 @@ public class Main extends JFrame {
         
         // Setup Course Table
         String[] columnNames = {"Department", "Course"};
-        JTable courseTable = new JTable(courseData, columnNames);
+        JTable courseTable = new JTable(courseData, columnNames) {
+          private static final long serialVersionUID = 1L;
+          @Override
+          public boolean isCellEditable(int row, int column){
+              return false;
+          }
+        };
         courseTable.setPreferredScrollableViewportSize(new Dimension(1, 1));
         courseTable.addMouseListener(tableMouseListener);
-        courseTable.setEnabled(false);  // Make Non-Editable
         setup.fill = GridBagConstraints.BOTH;
         setup.weightx = 0.5;
         setup.weighty = 1;
@@ -106,10 +111,15 @@ public class Main extends JFrame {
         
         // Setup Schedule Table
         columnNames = new String[]{"Course ID", "Department", "Course", "Start Time", "End Time", "Room"};
-        JTable scheduleTable = new JTable(scheduleData, columnNames);
+        JTable scheduleTable = new JTable(scheduleData, columnNames) {
+          private static final long serialVersionUID = 1L;
+          @Override
+          public boolean isCellEditable(int row, int column){
+              return false;
+          }
+        };
         //scheduleTable.setPreferredScrollableViewportSize(new Dimension(2, 1));    // TODO Fix Layout
         scheduleTable.addMouseListener(tableMouseListener);
-        scheduleTable.setEnabled(false);  // Make Cells Non-editable
         setup.fill = GridBagConstraints.BOTH;
         setup.weightx = 1;
         setup.weighty = 1;
