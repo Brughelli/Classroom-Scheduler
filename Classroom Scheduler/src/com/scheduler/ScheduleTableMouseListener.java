@@ -1,4 +1,5 @@
 package com.scheduler;
+
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -6,7 +7,7 @@ import java.awt.event.MouseListener;
 import javax.swing.JDialog;
 import javax.swing.JTable;
 
-public class TableMouseListener implements MouseListener {
+public class ScheduleTableMouseListener implements MouseListener {
 
   @Override
   public void mouseClicked(MouseEvent e) {
@@ -16,7 +17,6 @@ public class TableMouseListener implements MouseListener {
       JTable target = (JTable) e.getSource();
       Point myPoint = e.getPoint();
       int row = target.rowAtPoint(myPoint);
-      row += 1;
       
       // Setup Window
       JDialog infoDialog = new CourseDetails(row);
@@ -49,4 +49,5 @@ public class TableMouseListener implements MouseListener {
     // TODO Auto-generated method stub
     
   }
+
 }
