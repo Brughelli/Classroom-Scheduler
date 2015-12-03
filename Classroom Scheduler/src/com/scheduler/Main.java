@@ -7,8 +7,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -22,8 +20,8 @@ import javax.swing.border.TitledBorder;
 
 public class Main extends JFrame {
   private static final long serialVersionUID = 1L;
-  private UserLogin loginDialog;
   private static boolean admin = false;
+  private UserLogin loginDialog;
 
   public Main(){
     loginDialog = new UserLogin(this, true);
@@ -51,7 +49,7 @@ public class Main extends JFrame {
       @Override
       public void run() {
         // Setup Window
-        JFrame frame = new Main();
+        Main frame = new Main();
         frame.setTitle("Logged In");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1200, 800);
@@ -60,66 +58,17 @@ public class Main extends JFrame {
         
         // Create Components
         ButtonActionListener buttonListener = new ButtonActionListener(frame);
-        TableMouseListener tableMouseListener = new TableMouseListener();
         JPanel tablePanel = new JPanel(new GridBagLayout());
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         GridBagConstraints setup = new GridBagConstraints();
         
-        // Course Table
-        String[][] courseData = null;
-        try {
-          courseData = DatabaseToolbox.getTableData("Course", new int[]{2, 4});
-        } catch (SQLException e1) {
-          // TODO Auto-generated catch block
-          e1.printStackTrace();
-        }
-        
-        // Sort and Remove Duplicates
-        Toolbox.twoDArraySort(courseData, 1);
-        courseData = Toolbox.twoDArrayDuplicateRemoval(courseData, 1);
-        
-        // Setup Course Table
-        String[] columnNames = {"Department", "Course"};
-        JTable courseTable = new JTable(courseData, columnNames) {
-          private static final long serialVersionUID = 1L;
-          @Override
-          public boolean isCellEditable(int row, int column){
-              return false;
-          }
-        };
-        courseTable.setPreferredScrollableViewportSize(new Dimension(1, 1));
-        courseTable.addMouseListener(tableMouseListener);
-        setup.fill = GridBagConstraints.BOTH;
-        setup.weightx = 0.5;
-        setup.weighty = 1;
-        setup.gridx = 0;
-        setup.insets = new Insets(10,10,10,5);
-        // Create Scroll Pane for Table
-        JScrollPane courseScrollPane = new JScrollPane(courseTable);
-        courseScrollPane.setBorder(BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),
-                                                        "Course List", TitledBorder.CENTER, TitledBorder.TOP));
-        tablePanel.add(courseScrollPane, setup);
-        
-        // Schedule Table
-        String[][] scheduleData = null;
-        try {
-          scheduleData = DatabaseToolbox.getTableData("Schedule", new int[]{1, 2, 3, 6, 4 ,5});
-        } catch (SQLException e1) {
-          // TODO Auto-generated catch block
-          e1.printStackTrace();
-        }
-        
         // Setup Schedule Table
-        columnNames = new String[]{"Course ID", "Department", "Course", "Start Time", "End Time", "Room"};
-        JTable scheduleTable = new JTable(scheduleData, columnNames) {
-          private static final long serialVersionUID = 1L;
-          @Override
-          public boolean isCellEditable(int row, int column){
-              return false;
-          }
-        };
+        Object[][] scheduleData = TableDataRetriever.getTableData("Schedule", new int[]{1, 2, 3, 6, 4 ,5});
+        String[] columnNames = new String[]{"Course ID", "Department", "Course", "Start Time", "End Time", "Room"};
+        SchedulerTableModel scheduleModel = new SchedulerTableModel(scheduleData, columnNames);
+        JTable scheduleTable = new JTable(scheduleModel);
         //scheduleTable.setPreferredScrollableViewportSize(new Dimension(2, 1));    // TODO Fix Layout
-        scheduleTable.addMouseListener(tableMouseListener);
+        scheduleTable.addMouseListener(new ScheduleTableMouseListener());
         setup.fill = GridBagConstraints.BOTH;
         setup.weightx = 1;
         setup.weighty = 1;
@@ -130,6 +79,31 @@ public class Main extends JFrame {
         scheduleScrollPane.setBorder(BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),
                                                       "Course Schedule", TitledBorder.CENTER, TitledBorder.TOP));
         tablePanel.add(scheduleScrollPane, setup);
+        
+     // Setup Course Table
+        Object[][] courseData = TableDataRetriever.getTableData("Course", new int[]{2, 4});
+        Toolbox.twoDArraySort(courseData, 1);
+        courseData = Toolbox.twoDArrayDuplicateRemoval(courseData, 1);
+        columnNames = new String[]{"Department", "Course"};
+        JTable courseTable = new JTable(courseData, columnNames) {
+          private static final long serialVersionUID = 1L;
+          @Override
+          public boolean isCellEditable(int row, int column){
+            return false;
+          }
+        };
+        courseTable.setPreferredScrollableViewportSize(new Dimension(1, 1));
+        courseTable.addMouseListener(new CourseTableMouseListener(scheduleModel));
+        setup.fill = GridBagConstraints.BOTH;
+        setup.weightx = 0.5;
+        setup.weighty = 1;
+        setup.gridx = 0;
+        setup.insets = new Insets(10,10,10,5);
+        // Create Scroll Pane for Table
+        JScrollPane courseScrollPane = new JScrollPane(courseTable);
+        courseScrollPane.setBorder(BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),
+                                                        "Course List", TitledBorder.CENTER, TitledBorder.TOP));
+        tablePanel.add(courseScrollPane, setup);
         
         // Admin Only Buttons
         if (Main.isAdmin()) {
