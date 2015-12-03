@@ -2,7 +2,7 @@ package com.users;
 
 import java.util.ArrayList;
 
-import com.scheduler.DatabaseToolbox;
+import com.scheduler.UpdateDatabase;
 
 public class Driver {
   public static void main(String[] args) {
@@ -17,6 +17,6 @@ public class Driver {
     }
     users.add(new User("admin", "", true));
     
-    DatabaseToolbox.updateDatabse(User.class, users);
+    UpdateDatabase.updateTable(User.class, users);
   }
 }
