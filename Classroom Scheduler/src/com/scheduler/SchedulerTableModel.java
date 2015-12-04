@@ -17,6 +17,10 @@ public class SchedulerTableModel extends AbstractTableModel {
     return columnNames.length;
   }
   @Override
+  public String getColumnName(int column) {
+    return (String) columnNames[column];
+  }
+  @Override
   public int getRowCount() {
     return data.length;
   }

@@ -15,7 +15,7 @@ public class Toolbox {
    * @param sortIndex   index in sub arrays that will be used for sorting (Converted to Strings)
    * @return            void
    */
-  public static void twoDArraySort(Object[][] array, int sortIndex) {
+  public static void twoDArraySort(Object[][] array, final int sortIndex) {
     java.util.Arrays.sort(array, new java.util.Comparator<Object[]>() {
       public int compare(Object[] a, Object[] b) {
           return ((String) a[sortIndex]).compareTo((String) b[sortIndex]);
