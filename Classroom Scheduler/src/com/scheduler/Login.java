@@ -24,9 +24,9 @@ public class Login {
         // TODO Hash Passwords to make them safe
         if (user.getString("password").equals(password)) {
           if (user.getBoolean("admin") == true) {
-            Main.setAdmin(true);
+            SchedulerUI.setAdmin(true);
           } else {
-            Main.setAdmin(false);
+            SchedulerUI.setAdmin(false);
           }
           return true;
         }
