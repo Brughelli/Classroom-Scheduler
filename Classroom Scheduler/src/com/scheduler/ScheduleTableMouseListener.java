@@ -14,9 +14,9 @@ public class ScheduleTableMouseListener implements MouseListener {
     // Double-Click
     if (e.getClickCount() == 2) {
       // Get Row in Table
-      JTable target = (JTable) e.getSource();
-      Point myPoint = e.getPoint();
-      int row = target.rowAtPoint(myPoint);
+      JTable table = (JTable) e.getSource();
+      Point point = e.getPoint();
+      int row = table.rowAtPoint(point);
       
       // Setup Window
       JDialog infoDialog = new CourseDetails(row);
@@ -40,8 +40,10 @@ public class ScheduleTableMouseListener implements MouseListener {
 
   @Override
   public void mousePressed(MouseEvent e) {
-    // TODO Auto-generated method stub
-    
+    JTable table = (JTable) e.getSource();
+    Point point = e.getPoint();
+    int currentRow = table.rowAtPoint(point);
+    table.setRowSelectionInterval(currentRow, currentRow);
   }
 
   @Override
