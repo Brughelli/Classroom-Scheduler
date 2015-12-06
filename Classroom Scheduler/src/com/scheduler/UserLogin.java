@@ -4,9 +4,11 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -22,16 +24,10 @@ public class UserLogin extends JDialog {
   private JLabel statusLabel;
   private JTextField usernameTextField;
   private JPasswordField passwordTextField;
-  private JFrame myParent;
   
-  public UserLogin() {
-    this(null, true);
-  }
   
-  public UserLogin(final JFrame parent, boolean modal) {
+  public UserLogin(boolean modal) {
     // Setup Window
-    super(parent, modal);
-    this.myParent = parent;
     this.setSize(300,350);
     this.setLocationRelativeTo(null);   //Center Login
     this.setTitle("User Login");
@@ -91,7 +87,13 @@ public class UserLogin extends JDialog {
     
     // Setup Close Button
     this.closeButton = new JButton("Close");
-    closeButton.addActionListener(buttonListener);
+    closeButton.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        // Main Close Button should exit the program
+        System.exit(0);
+      }
+    });
     setup.gridx = 1;
     setup.gridy = 4;
     setup.insets = new Insets(10,0,0,80);
@@ -123,9 +125,5 @@ public class UserLogin extends JDialog {
 
   public JPasswordField getPasswordTextField() {
     return passwordTextField;
-  }
-
-  public JFrame getMyParent() {
-    return myParent;
   }
 }
