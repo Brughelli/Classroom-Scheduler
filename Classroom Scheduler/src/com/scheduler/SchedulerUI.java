@@ -5,11 +5,15 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -23,6 +27,8 @@ public class SchedulerUI extends JFrame {
   private static boolean ready = false;
   private static boolean admin = false;
   private JFrame frame;
+  SchedulerTableModel scheduleTableModel;
+  SchedulerTableModel courseTableModel;
   
   public SchedulerUI() {
     frame = new JFrame();
@@ -38,43 +44,131 @@ public class SchedulerUI extends JFrame {
     JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
     GridBagConstraints setup = new GridBagConstraints();
     
-    // Setup Schedule Table
+    /************************
+     * SCHEDULE TABLE SETUP *
+     ************************/
     Object[][] scheduleData = TableDataRetriever.getTableData("Schedule", new int[]{1, 2, 3, 6, 4 ,5});
     String[] columnNames = new String[]{"Course ID", "Department", "Course", "Start Time", "End Time", "Room"};
-    SchedulerTableModel scheduleModel = new SchedulerTableModel(scheduleData, columnNames);
-    JTable scheduleTable = new JTable(scheduleModel);
-    //scheduleTable.setPreferredScrollableViewportSize(new Dimension(2, 1));    // TODO Fix Layout
-    scheduleTable.addMouseListener(new ScheduleTableMouseListener());
+    scheduleTableModel = new SchedulerTableModel(scheduleData, columnNames);
+    JTable scheduleTable = new JTable(scheduleTableModel);
+    
+    // Mouse Listener
+    scheduleTable.addMouseListener(new MouseListener() {
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        // Double-Click
+        if (e.getClickCount() == 2) {
+          // Get Row in Table
+          JTable table = (JTable) e.getSource();
+          Point point = e.getPoint();
+          int row = table.rowAtPoint(point);
+          
+          // Setup Window
+          JDialog infoDialog = new CourseDetails(row);
+          
+          // Show Window
+          infoDialog.setVisible(true);
+        }
+      }
+      
+      @Override
+      public void mousePressed(MouseEvent e) {
+        JTable table = (JTable) e.getSource();
+        Point point = e.getPoint();
+        int currentRow = table.rowAtPoint(point);
+        table.setRowSelectionInterval(currentRow, currentRow);
+      }
+
+      @Override
+      public void mouseEntered(MouseEvent arg0) {
+        // TODO Auto-generated method stub
+        
+      }
+
+      @Override
+      public void mouseExited(MouseEvent arg0) {
+        // TODO Auto-generated method stub
+        
+      }
+
+      @Override
+      public void mouseReleased(MouseEvent arg0) {
+        // TODO Auto-generated method stub
+        
+      }
+    });
+    
+    // Layout Parameters
     setup.fill = GridBagConstraints.BOTH;
     setup.weightx = 1;
     setup.weighty = 1;
     setup.gridx = 1;
     setup.insets = new Insets(10,5,10,10);
+    
     // Create Scroll Pane for Table
     JScrollPane scheduleScrollPane = new JScrollPane(scheduleTable);
     scheduleScrollPane.setBorder(BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),
                                                   "Course Schedule", TitledBorder.CENTER, TitledBorder.TOP));
     tablePanel.add(scheduleScrollPane, setup);
     
-    // Setup Course Table
+    /**********************
+     * Course Table Setup *
+     **********************/
     Object[][] courseData = TableDataRetriever.getTableData("Course", new int[]{2, 4});
     Toolbox.twoDArraySort(courseData, 1);
     courseData = Toolbox.twoDArrayDuplicateRemoval(courseData, 1);
     columnNames = new String[]{"Department", "Course"};
-    JTable courseTable = new JTable(courseData, columnNames) {
-      private static final long serialVersionUID = 1L;
-      @Override
-      public boolean isCellEditable(int row, int column){
-        return false;
-      }
-    };
+    courseTableModel = new SchedulerTableModel(courseData, columnNames);
+    JTable courseTable = new JTable(courseTableModel);
     courseTable.setPreferredScrollableViewportSize(new Dimension(1, 1));
-    courseTable.addMouseListener(new CourseTableMouseListener(scheduleModel));
+    
+    // Mouse Listener
+    courseTable.addMouseListener(new MouseListener() {
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        // Double-Click
+        if (e.getClickCount() == 2) {
+          // Get Row in Table
+          JTable table = (JTable) e.getSource();
+          String filter = table.getValueAt(table.getSelectedRow(), 1).toString();
+          Object[][] newScheduleData = TableDataRetriever.getTableData("Schedule", new int[]{1, 2, 3, 6, 4 ,5}, filter, "courseNumber");
+          scheduleTableModel.updateTable(newScheduleData);
+        }
+      }
+
+      @Override
+      public void mouseEntered(MouseEvent e) {
+        // TODO Auto-generated method stub
+        
+      }
+
+      @Override
+      public void mouseExited(MouseEvent e) {
+        // TODO Auto-generated method stub
+        
+      }
+
+      @Override
+      public void mousePressed(MouseEvent e) {
+        JTable table = (JTable) e.getSource();
+        Point point = e.getPoint();
+        int currentRow = table.rowAtPoint(point);
+        table.setRowSelectionInterval(currentRow, currentRow);
+      }
+
+      @Override
+      public void mouseReleased(MouseEvent e) {
+        
+      }
+    });
+    
+    // Layout Parameters
     setup.fill = GridBagConstraints.BOTH;
     setup.weightx = 0.5;
     setup.weighty = 1;
     setup.gridx = 0;
     setup.insets = new Insets(10,10,10,5);
+    
     // Create Scroll Pane for Table
     JScrollPane courseScrollPane = new JScrollPane(courseTable);
     courseScrollPane.setBorder(BorderFactory.createTitledBorder (BorderFactory.createEtchedBorder (),
@@ -88,14 +182,14 @@ public class SchedulerUI extends JFrame {
       @Override
       public void actionPerformed(ActionEvent e) {
           JMenuItem menu = (JMenuItem) e.getSource();
-          System.out.println(menu.getText());
+          int selectedRow = scheduleTable.getSelectedRow();
+          scheduleTableModel.removeRow(selectedRow);
       }
     });
     popupMenu.add(menuItemRemove);
     
     // Set Table Popup Menus
     scheduleTable.setComponentPopupMenu(popupMenu);
-    courseTable.setComponentPopupMenu(popupMenu);
     
     while (!ready) {
       try {
