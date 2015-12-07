@@ -9,18 +9,25 @@ public class Schedule {
   private String courseId;
   private String courseDepartment;
   private String courseNumber;
+  private String courseName;
+  private String instructorName;
+  private String enrollmentSize;
+  private String day;
   private String startTime;
   private String endTime;
-  private String roomNumber;
   
-  public Schedule(String courseId, String courseDepartment, String courseNumber,
-                                String startTime, String endTime, String roomNumber) {
+  public Schedule(String courseId, String courseDepartment, String courseNumber, String courseName,
+                                String instructor, String enrollment, String day,
+                                String startTime, String endTime) {
     this.courseId = courseId;
     this.courseDepartment = courseDepartment;
     this.courseNumber = courseNumber;
+    this.courseName = courseName;
+    this.instructorName = instructor;
+    this.enrollmentSize = enrollment;
+    this.day = day;
     this.startTime = startTime;
     this.endTime = endTime;
-    this.roomNumber = roomNumber;
   }
 
   public String getCourseId() {
@@ -47,6 +54,14 @@ public class Schedule {
     this.courseNumber = courseNumber;
   }
 
+  public String getCourseName() {
+    return courseName;
+  }
+
+  public void setCourseName(String courseName) {
+    this.courseName = courseName;
+  }
+
   public String getStartTime() {
     return startTime;
   }
@@ -63,11 +78,29 @@ public class Schedule {
     this.endTime = endTime;
   }
 
-  public String getRoomNumber() {
-    return roomNumber;
+  public String getInstructorName() {
+    return instructorName;
   }
 
-  public void setRoomNumber(String roomNumber) {
-    this.roomNumber = roomNumber;
+  public void setInstructorName(String instructorName) {
+    this.instructorName = instructorName;
   }
+
+  public String getEnrollmentSize() {
+    return enrollmentSize;
+  }
+
+  public void setEnrollmentSize(String enrollmentSize) {
+    this.enrollmentSize = enrollmentSize;
+  }
+
+  public String getDay() {
+    return day;
+  }
+
+  public void setDay(String day) {
+    this.day = day;
+  }
+
+  
 }

@@ -19,6 +19,7 @@ public class CourseListImport {
     JFileChooser fileChooser = new JFileChooser();
     int result = fileChooser.showOpenDialog(frame);
     if (result == JFileChooser.APPROVE_OPTION) {
+      ArrayList<Object> courses = new ArrayList<Object>();
       String filename = fileChooser.getSelectedFile().getPath();
       try {
         // Open file for reading
@@ -27,10 +28,19 @@ public class CourseListImport {
         
         // Read Lines
         // TODO Implement actual Course import
-        /*String line;
+        String line;
+        int i = 0;
         while((line = bufferedReader.readLine()) != null) {
           // Unfinished
-        }*/
+          courses.add(new Course(String.valueOf(i), line, bufferedReader.readLine(), bufferedReader.readLine(),
+                                                            bufferedReader.readLine(), bufferedReader.readLine()));
+          
+          // Bypass Trash in temp file
+          bufferedReader.readLine();
+          bufferedReader.readLine();
+          bufferedReader.readLine();
+          i += 1;
+        }
         
         // Close Reader
         bufferedReader.close();
@@ -41,26 +51,9 @@ public class CourseListImport {
         e.printStackTrace();
       }
       
-      // Temp Course Import
-      ArrayList<Object> courses = new ArrayList<Object>();
-      for (int i = 0; i < 10; i++) {
-        courses.add(new Course(String.valueOf("0" + i), "CSCI", "4300", "Temp Name", "Professor X", "25"));
-      }
-      for (int i = 10; i < 20; i++) {
-        courses.add(new Course(String.valueOf(i), "CSCI", "4800", "Temp Name", "Professor X", "25"));
-      }
-      for (int i = 20; i < 40; i++) {
-        courses.add(new Course(String.valueOf(i), "CSCI", "3300", "Temp Name", "Professor X", "35"));
-      }
-      for (int i = 40; i < 60; i++) {
-        courses.add(new Course(String.valueOf(i), "CSCI", "2300", "Temp Name", "Professor X", "50"));
-      }
-      for (int i = 60; i < 80; i++) {
-        courses.add(new Course(String.valueOf(i), "CSCI", "2400", "Temp Name", "Professor X", "75"));
-      }
-      for (int i = 80; i < 100; i++) {
-        courses.add(new Course(String.valueOf(i), "CSCI", "1300", "Temp Name", "Professor X", "100"));
-      }
+      // Temp Course Duplicate Remover for faster searching
+      
+      
       
       // Update Course Database
       UpdateDatabase.updateTable(Course.class, courses);
